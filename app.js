@@ -9,7 +9,7 @@ const itemRoutes = require('./server/routes/item');
 const purchaseRoutes = require('./server/routes/purchase');
 const nftRoutes = require('./server/routes/nft');
 const blockchainRoutes = require('./server/routes/blockchain');
-const  authJwt  = require("./server/middleware/authJwt");
+const authJwt = require("./server/middleware/authJwt");
 
 const fileUpload = require('express-fileupload');
 const createError = require('http-errors');
@@ -58,6 +58,15 @@ app.use(fileUpload({
   createParentPath: true
 }));
 
+const root = require('path').join(__dirname, 'public');
+// const rootJs = require('path').join(__dirname, 'public/javascripts');
+
+// 정적 페이지를 보낸다.
+app.use(express.static(root));
+// app.use(express.static(rootJs));
+
+// app.listen(4004);
+// app.use('/', indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/nonuser', nonUserRoutes);
