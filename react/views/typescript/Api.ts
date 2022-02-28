@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const url = `http://169.56.87.186:8080`;
+// const url = `http://169.56.87.186:8080`;
+const url = `http://localhost:8080`;
 
 // Common ////////////////////////////////////////////////////////////
 

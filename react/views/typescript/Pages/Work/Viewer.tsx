@@ -111,13 +111,13 @@ const Viewer = ({ novelDetail }: { novelDetail: INovelDetail }) => {
             <PageContainer
               title={episodeData?.name}
               author={episodeData?.author}
-              contents={episodeData?.pages[nowPage - 1].content}
-              isVisibleOption={episodeData?.pages[nowPage - 1].hasChoice}
-              isLastPage={episodeData?.pages[nowPage - 1].context !== ''}
+              contents={episodeData?.pages[nowPage - 1]?.content}
+              isVisibleOption={episodeData?.pages[nowPage - 1]?.hasChoice}
+              isLastPage={episodeData?.pages[nowPage - 1]?.context !== ''}
               isFirstPage={nowPage === 1}
             />
           </Container>
-          {episodeData?.pages[nowPage - 1].hasChoice && (
+          {episodeData?.pages[nowPage - 1]?.hasChoice && (
             <SelectOption novelId={episodeData.novelId} goNext={goNext} />
           )}
           <Footer
@@ -126,13 +126,13 @@ const Viewer = ({ novelDetail }: { novelDetail: INovelDetail }) => {
               setNowPage((current) => current - 1);
             }}
             moveNext={() => {
-              if (episodeData?.pages[nowPage - 1].context !== '') return;
+              if (episodeData?.pages[nowPage - 1]?.context !== '') return;
               setNowPage((current) => current + 1);
             }}
-            isLastPage={episodeData?.pages[nowPage - 1].context !== ''}
+            isLastPage={episodeData?.pages[nowPage - 1]?.context !== ''}
             isFirstPage={nowPage === 1}
-            isEndingPage={episodeData?.pages[nowPage - 1].content.includes('-끝-')}
-            haschoice={episodeData?.pages[nowPage - 1].hasChoice}
+            isEndingPage={episodeData?.pages[nowPage - 1]?.content.includes('-끝-')}
+            haschoice={episodeData?.pages[nowPage - 1]?.hasChoice}
             novelDetail={novelDetail}
           />
         </>
