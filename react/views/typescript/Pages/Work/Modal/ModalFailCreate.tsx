@@ -2,7 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { Btn_Modal_Black } from '../../../Components/ButtonModal';
 
-const ModalFailCreate = ({ closeModal }: { closeModal: () => void }) => {
+interface props {
+  modal: any;
+  setModal: any;
+}
+
+const ModalFailCreate = ({ modal, setModal }: props) => {
+  const closeModal = () => {
+    setModal({
+      fail: false,
+      noItem: true
+    });
+  }
+
   return (
     <ModalContainer>
       <ModalBox>

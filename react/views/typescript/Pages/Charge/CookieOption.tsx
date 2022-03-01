@@ -7,7 +7,7 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { userInfoAtom, cookieTriggerAtom } from '../../Store/Atoms';
 import { purchaseCookie } from '../../Api';
 
-const CookieOption = ({ isActive, count, price, setFocus }: ICookieOptionProps) => {
+const CookieOption = ({ isActive, count, price, setFocus, setComplete }: ICookieOptionProps) => {
   const navigate = useNavigate();
   const userInfo = useRecoilValue(userInfoAtom);
   const [cookieTrigger, setCookieTrigger] = useRecoilState(cookieTriggerAtom);
@@ -30,7 +30,7 @@ const CookieOption = ({ isActive, count, price, setFocus }: ICookieOptionProps) 
           onClick={() => {
             purchaseCookie(userInfo.accessToken, count.toString()).then((res) => {
               setCookieTrigger((prev) => !prev);
-              navigate('/charge/complete');
+              setComplete(true);
             });
           }}
         >

@@ -18,6 +18,13 @@ const SelectOption = ({ novelId, goNext }: { novelId: number; goNext: (num: numb
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
   const [optionTrigger, setOptionTrigger] = useRecoilState(optionTriggerAtom);
   const [isLoading, setIsLoading] = useState(false);
+  const [modal, setModal] = useState({
+    noItem: false,
+    draw: false,
+    fail: false,
+    using: false,
+    item: ''
+  });
 
   useEffect(() => {
     postItem(userInfo.accessToken, novelId).then((res) => {
@@ -42,7 +49,19 @@ const SelectOption = ({ novelId, goNext }: { novelId: number; goNext: (num: numb
       });
     } else {
       // 없으면, 모달창 띄우기
-      navigate(`/work/viewer/${item}/noitem`);
+      let itemName = '';
+
+      if(item == undefined) {
+        itemName = '';
+      } else {
+        itemName = item;
+      }
+
+      setModal({
+        ...modal,
+        noItem: true,
+        item: itemName
+      });
     }
   };
 
@@ -77,15 +96,15 @@ const SelectOption = ({ novelId, goNext }: { novelId: number; goNext: (num: numb
           })}
       </SelectContainer>
       {isLoading && <Loading />}
-      <Routes>
-        <Route path="/noitem" element={<ModalNoItem closeModal={closeModal} />} />
-        <Route path="/draw" element={<ModalDraw closeModal={closeModal} />} />
-        <Route path="/fail" element={<ModalFailCreate closeModal={closeModal} />} />
-        <Route
-          path="/using"
-          element={<ModalUseItem closeModal={closeModal} choiceList={choice} novelId={novelId} />}
-        />
-      </Routes>
+      {modal.noItem && <ModalNoItem modal={modal} setModal={setModal} choiceList={choice} novelId={novelId}/>}
+      {/*<Routes>*/}
+      {/*  <Route path="/draw" element={<ModalDraw closeModal={closeModal} />} />*/}
+      {/*  <Route path="/fail" element={<ModalFailCreate closeModal={closeModal} />} />*/}
+      {/*  <Route*/}
+      {/*    path="/using"*/}
+      {/*    element={<ModalUseItem closeModal={closeModal} choiceList={choice} novelId={novelId} />}*/}
+      {/*  />*/}
+      {/*</Routes>*/}
     </>
   );
 };

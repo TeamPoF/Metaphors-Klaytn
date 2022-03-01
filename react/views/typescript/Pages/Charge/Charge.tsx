@@ -19,9 +19,10 @@ const Charge = () => {
     cookie: 0,
     token: 0,
   });
+  const [complete, setComplete] = useState(false);
 
   const closeModal = () => {
-    navigate('/charge');
+    setComplete(false);
   };
 
   useEffect(() => {
@@ -43,19 +44,12 @@ const Charge = () => {
           사용 가능한 쿠키 <span className="my_cookie">{user.cookie}</span>
         </p>
         <Cookie_Container>
-          <CookieOption setFocus={setFocus} isActive={cookieFocus === 10} count={10} price={1000} />
-          <CookieOption setFocus={setFocus} isActive={cookieFocus === 50} count={50} price={4900} />
-          <CookieOption
-            setFocus={setFocus}
-            isActive={cookieFocus === 100}
-            count={100}
-            price={9800}
-          />
+          <CookieOption setFocus={setFocus} isActive={cookieFocus === 10} count={10} price={1000} setComplete={setComplete}/>
+          <CookieOption setFocus={setFocus} isActive={cookieFocus === 50} count={50} price={4900} setComplete={setComplete}/>
+          <CookieOption setFocus={setFocus} isActive={cookieFocus === 100} count={100} price={9800} setComplete={setComplete}/>
         </Cookie_Container>
       </Container>
-      <Routes>
-        <Route path="/complete" element={<ModalCompleteCharge closeModal={closeModal} />} />
-      </Routes>
+      {complete && <ModalCompleteCharge closeModal={closeModal}/>}
     </>
   );
 };

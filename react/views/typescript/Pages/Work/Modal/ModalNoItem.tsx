@@ -7,10 +7,20 @@ import { getUserAssetInfo, postCreateItem } from '../../../Api';
 import { useRecoilState } from 'recoil';
 import { userInfoAtom, isNovelAtom } from '../../../Store/Atoms';
 import Loading from '../../../Components/Loading';
+import ModalDraw from "./ModalDraw";
+import ModalFailCreate from "./ModalFailCreate";
+import ModalUseItem from "./ModalUseItem";
 
-const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
+interface props {
+  modal: any;
+  setModal: any;
+  choiceList: any;
+  novelId: any;
+}
+
+const ModalNoItem = ({ modal, setModal, choiceList, novelId }: props) => {
   const navigate = useNavigate();
-  const params = useParams();
+  // const params = useParams();
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
   const [isNovel, setIsNovel] = useRecoilState(isNovelAtom);
   const [tryCount, setTryCount] = useState(0);
@@ -20,12 +30,20 @@ const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
 
   const handleCreateClick = () => {
     setIsLoading(true);
-    postCreateItem(userInfo.accessToken, params.id).then((res) => {
+    postCreateItem(userInfo.accessToken, modal.item).then((res) => {
       setIsLoading(false);
       if (res.result === 'ok') {
-        navigate(`/work/viewer/${params.id}/draw`);
+        // navigate(`/work/viewer/${modal.item}/draw`);
+        setModal({
+          ...modal,
+          draw: true,
+        });
       } else if (res.result === 'fail') {
-        navigate(`/work/viewer/${params.id}/fail`);
+        // navigate(`/work/viewer/${modal.item}/fail`);
+        setModal({
+          ...modal,
+          fail: true,
+        });
       } else {
         setTryCount((prev) => prev + 1);
       }
@@ -33,7 +51,11 @@ const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const handleUseClick = () => {
-    navigate(`/work/viewer/${params.id}/using`);
+    // navigate(`/work/viewer/${modal.item}/using`);
+    setModal({
+      ...modal,
+      using: true
+    });
   };
 
   useEffect(() => {
@@ -47,6 +69,13 @@ const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
     }
   }, []);
 
+  const closeModal = () => {
+    setModal({
+      ...modal,
+      noItem: false
+    });
+  }
+
   return (
     <>
       <ModalContainer>
@@ -55,7 +84,7 @@ const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
           {tryCount === 0 ? (
             <h3>
               원하는 행동을 하기 위해서는
-              <br />[{params.id}]가 필요해요
+              <br />[{modal.item}]가 필요해요
             </h3>
           ) : (
             <h3>
@@ -66,12 +95,12 @@ const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
           )}
           <Btn_Container>
             <Btn_Modal_Primary
-              label={`[${params.id}] 확률로 획득하기`}
+              label={`[${modal.item}] 확률로 획득하기`}
               onClick={handleCreateClick}
               nowToken={nowToken}
             />
             <Btn_Modal_White
-              label={`[${params.id}] 구입하기`}
+              label={`[${modal.item}] 구입하기`}
               onClick={() => {
                 navigate(`/market`);
                 setIsNovel({
@@ -83,7 +112,7 @@ const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
               }}
             />
             <Btn_Modal_Black
-              label={`쿠키 1개로 [${params.id}] 1회 이용하기`}
+              label={`쿠키 1개로 [${modal.item}] 1회 이용하기`}
               onClick={handleUseClick}
               nowToken={nowCookie}
             />
@@ -91,6 +120,9 @@ const ModalNoItem = ({ closeModal }: { closeModal: () => void }) => {
         </ModalBox>
       </ModalContainer>
       {isLoading && <Loading />}
+      {modal.draw && <ModalDraw modal={modal} setModal={setModal}/>}
+      {modal.fail && <ModalFailCreate modal={modal} setModal={setModal}/>}
+      {modal.using && <ModalUseItem modal={modal} setModal={setModal} choiceList={choiceList} novelId={novelId}/>}
     </>
   );
 };

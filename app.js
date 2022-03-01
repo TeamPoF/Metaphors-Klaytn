@@ -79,7 +79,8 @@ app.use('/api/blockchain', blockchainRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  // res.redirect('http://localhost:8080');
+  res.redirect('http://169.56.87.186:8080');
 });
 
 //pm2 사용할때만

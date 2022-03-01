@@ -7,15 +7,14 @@ import { Btn_Modal_Black, Btn_Modal_White } from '../../../Components/ButtonModa
 import { userInfoAtom, changeAssetToggleAtom, useCookieAtom } from '../../../Store/Atoms';
 import { INovelChoice } from '../../../Store/Type/Interfaces';
 
-const ModalUseItem = ({
-  closeModal,
-  choiceList,
-  novelId,
-}: {
-  closeModal: () => void;
-  choiceList: INovelChoice[] | undefined;
-  novelId: number;
-}) => {
+interface props {
+  modal: any;
+  setModal: any;
+  choiceList: any;
+  novelId: any;
+}
+
+const ModalUseItem = ({modal, setModal, choiceList, novelId}: props) => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
   const [changeAssetToggle, setChangeAssetToggle] = useRecoilState(changeAssetToggleAtom);
   const [useCookie, setUseCookie] = useRecoilState(useCookieAtom);
@@ -30,7 +29,7 @@ const ModalUseItem = ({
   };
 
   const handleUseClick = () => {
-    const next = choiceList && params.id && getNext(choiceList, params.id);
+    const next = choiceList && modal.item && getNext(choiceList, modal.item);
     next &&
       postUseItemCookie(userInfo.accessToken, novelId.toString(), next).then((res) => {
         setChangeAssetToggle((prev) => !prev);
@@ -39,10 +38,17 @@ const ModalUseItem = ({
       });
   };
 
+  const closeModal = () => {
+    setModal({
+      ...modal,
+      using: false
+    });
+  };
+
   return (
     <ModalContainer>
       <ModalBox>
-        <h4>[{params.id}]를 사용하시겠습니까?</h4>
+        <h4>[{modal.item}]를 사용하시겠습니까?</h4>
         <Btn_Container>
           <Btn_Modal_White label="예" onClick={handleUseClick} />
           <Btn_Modal_Black label="아니요" onClick={closeModal} />

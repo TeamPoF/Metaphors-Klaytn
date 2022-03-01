@@ -8,7 +8,7 @@ import { userInfoAtom, klayTriggerAtom } from '../../Store/Atoms';
 import { purchaseToken } from '../../Api';
 import Loading from '../../Components/Loading';
 
-const KlayOption = ({ isActive, count, setFocus }: IKlayOptionProps) => {
+const KlayOption = ({ isActive, count, setFocus, setComplete }: IKlayOptionProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const userInfo = useRecoilValue(userInfoAtom);
@@ -34,7 +34,7 @@ const KlayOption = ({ isActive, count, setFocus }: IKlayOptionProps) => {
               purchaseToken(userInfo.accessToken, count.toString()).then((res) => {
                 setKlayTrigger((prev) => !prev);
                 setIsLoading(false);
-                navigate('/chargeklay/complete');
+                setComplete(true);
               });
             }}
           >

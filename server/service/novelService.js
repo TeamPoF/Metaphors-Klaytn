@@ -67,7 +67,8 @@ exports.novelList = async (userId) => {
         };
         response = {result: 'ok', content: content};
     } catch (err) {
-        throw Error(err.message);
+        console.log(err);
+        // throw Error(err.message);
     }
     return response;
 };

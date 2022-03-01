@@ -31,12 +31,14 @@ export interface ICookieOptionProps {
   count: number;
   price: number;
   setFocus: (value: number) => void;
+  setComplete: any;
 }
 
 export interface IKlayOptionProps {
   isActive: boolean;
   count: number;
   setFocus: (value: number) => void;
+  setComplete: any;
 }
 
 export interface IInput {

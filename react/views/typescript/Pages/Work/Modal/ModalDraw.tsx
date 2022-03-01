@@ -8,10 +8,14 @@ import { useRecoilState } from 'recoil';
 import { optionTriggerAtom, userInfoAtom } from '../../../Store/Atoms';
 import Loading from '../../../Components/Loading';
 
-const ModalDraw = ({ closeModal }: { closeModal: () => void }) => {
+interface props {
+  modal: any;
+  setModal: any;
+}
+
+const ModalDraw = ({ modal, setModal }: props) => {
   const navigate = useNavigate();
   const signCanvas = useRef() as React.MutableRefObject<any>;
-  const params = useParams();
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
   const [optionTrigger, setOptionTrigger] = useRecoilState(optionTriggerAtom);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -25,16 +29,26 @@ const ModalDraw = ({ closeModal }: { closeModal: () => void }) => {
     const dataURL = signCanvas.current.getTrimmedCanvas().toDataURL('image/png');
 
     setLoading(true);
-    params.id &&
-      postItemImage(userInfo.accessToken, dataURL, params.id)
+    modal.item &&
+      postItemImage(userInfo.accessToken, dataURL, modal.item)
         .then((res) => {
           setLoading(false);
           setOptionTrigger((prev) => !prev);
-          closeModal();
+          // closeModal();
+          setModal({
+            ...modal,
+            draw: false,
+            noItem: false
+          });
         })
         .catch((e) => {
           console.log('이미지 생성 실패', e);
-          navigate(`/work/viewer/${params.id}/noitem`);
+          // navigate(`/work/viewer/${params.id}/noitem`);
+          setModal({
+            ...modal,
+            draw: false,
+            noItem: true
+          });
         });
   };
 
@@ -42,8 +56,8 @@ const ModalDraw = ({ closeModal }: { closeModal: () => void }) => {
     <>
       <ModalContainer>
         <ModalBox>
-          <h3>[{params.id}] 획득 성공!</h3>
-          <p className="desc">나만의 [{params.id}]를 그려보세요.</p>
+          <h3>[{modal.item}] 획득 성공!</h3>
+          <p className="desc">나만의 [{modal.item}]를 그려보세요.</p>
           <Canvas_Container>
             <SignatureCanvas
               ref={signCanvas}

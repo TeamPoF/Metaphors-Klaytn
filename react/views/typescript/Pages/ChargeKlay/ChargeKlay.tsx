@@ -20,9 +20,10 @@ const ChargeKlay = () => {
     cookie: 0,
     token: 0,
   });
+  const [complete, setComplete] = useState(false);
 
   const closeModal = () => {
-    navigate('/chargeklay');
+    setComplete(false);
   };
 
   useEffect(() => {
@@ -43,15 +44,12 @@ const ChargeKlay = () => {
           <span>{user.token}</span> KLAY
         </p>
         <Klay_Container>
-          <KlayOption setFocus={setFocus} isActive={klayFocus === 1} count={1} />
-          <KlayOption setFocus={setFocus} isActive={klayFocus === 2} count={2} />
-          <KlayOption setFocus={setFocus} isActive={klayFocus === 3} count={3} />
+          <KlayOption setFocus={setFocus} isActive={klayFocus === 1} count={1} setComplete={setComplete}/>
+          <KlayOption setFocus={setFocus} isActive={klayFocus === 2} count={2} setComplete={setComplete}/>
+          <KlayOption setFocus={setFocus} isActive={klayFocus === 3} count={3} setComplete={setComplete}/>
         </Klay_Container>
       </Container>
-
-      <Routes>
-        <Route path="/complete" element={<ModalCompleteCharge closeModal={closeModal} />} />
-      </Routes>
+      {complete && <ModalCompleteCharge closeModal={closeModal}/>}
     </>
   );
 };
