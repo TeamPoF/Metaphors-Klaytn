@@ -10,8 +10,7 @@ interface props {
 const ModalFailCreate = ({ modal, setModal }: props) => {
   const closeModal = () => {
     setModal({
-      fail: false,
-      noItem: true
+      fail: false
     });
   }
 
